@@ -10,20 +10,26 @@ import com.team4099.robot2023.subsystems.drivetrain.drive.DrivetrainIOReal
 import com.team4099.robot2023.subsystems.drivetrain.drive.DrivetrainIOSim
 import com.team4099.robot2023.subsystems.drivetrain.gyro.GyroIO
 import com.team4099.robot2023.subsystems.drivetrain.gyro.GyroIONavx
+import com.team4099.robot2023.subsystems.elevator.Elevator
+import com.team4099.robot2023.subsystems.elevator.ElevatorIONeo
+import com.team4099.robot2023.subsystems.elevator.ElevatorIOSim
 import org.team4099.lib.smoothDeadband
 
 object RobotContainer {
   private val drivetrain: Drivetrain
+  private val elevator: Elevator
   //  private val vision: Vision
 
   init {
     if (Constants.Universal.ROBOT_MODE == Constants.Tuning.RobotType.REAL) {
       // Real Hardware Implementations
       drivetrain = Drivetrain(GyroIONavx, DrivetrainIOReal)
+      elevator = Elevator(ElevatorIONeo)
       //      vision = Vision(VisionIOSim)
     } else {
       // Simulation implementations
       drivetrain = Drivetrain(object : GyroIO {}, DrivetrainIOSim)
+      elevator = Elevator(ElevatorIOSim)
       //      vision = Vision(VisionIOSim)
     }
   }
