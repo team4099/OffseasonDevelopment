@@ -65,4 +65,9 @@ object Constants {
   object Alert {
     val TABS = arrayOf("Pre-match", "In-match")
   }
+
+  object Led {
+    const val LED_CANDLE_ID = 1
+    const val LED_BLINKEN_ID = 1
+  }
 }
