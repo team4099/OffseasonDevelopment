@@ -1,7 +1,7 @@
 import edu.wpi.first.gradlerio.deploy.roborio.RoboRIO
 
 plugins {
-	id "idea"
+	id "java"
 	id "org.jetbrains.kotlin.jvm" version "1.6.10"
 	id "edu.wpi.first.GradleRIO" version "2023.1.1"
 	id "com.diffplug.spotless" version "6.3.0"
@@ -85,7 +85,7 @@ dependencies {
 
 	implementation 'org.jetbrains.kotlin:kotlin-test-junit5'
 
-	implementation 'com.github.team4099:FalconUtils:1.0.2'
+	implementation 'com.github.team4099:FalconUtils:1.0.3'
 
 	// We need to add the Kotlin stdlib in order to use most Kotlin language features.
 	// compile "org.jetbrains.kotlin:kotlin-stdlib"
@@ -137,9 +137,20 @@ wrapper {
 	gradleVersion = '7.3.3'
 }
 
+// Configure jar and deploy tasks
+deployArtifact.jarTask = jar
+wpi.java.configureExecutableTasks(jar)
+wpi.java.configureTestTasks(test)
+
+// Configure string concat to always inline compile
+tasks.withType(JavaCompile) {
+	options.compilerArgs.add "-XDstringConcat=inline"
+}
+
 compileKotlin {
 	kotlinOptions {
 		freeCompilerArgs = ["-XXLanguage:+InlineClasses"]
+		jvmTarget="17"
 	}
 }
 
