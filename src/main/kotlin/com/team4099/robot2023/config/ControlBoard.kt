@@ -16,7 +16,7 @@ object ControlBoard {
     get() = -driver.leftXAxis
 
   val forward: Double
-    get() = driver.leftYAxis
+    get() = -driver.leftYAxis
 
   val turn: Double
     get() = driver.rightXAxis
@@ -25,4 +25,6 @@ object ControlBoard {
     get() = driver.leftShoulderButton
 
   val resetGyro = Trigger { driver.startButton && driver.selectButton }
+
+  val autoLevel = Trigger { driver.aButton }
 }

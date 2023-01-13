@@ -1,6 +1,8 @@
 package com.team4099.robot2023
 
 import com.team4099.robot2023.auto.AutonomousSelector
+import com.team4099.robot2023.commands.drivetrain.AutoLevel
+import com.team4099.robot2023.commands.drivetrain.GoToAngle
 import com.team4099.robot2023.commands.drivetrain.ResetGyroYawCommand
 import com.team4099.robot2023.commands.drivetrain.TeleopDriveCommand
 import com.team4099.robot2023.config.ControlBoard
@@ -9,30 +11,32 @@ import com.team4099.robot2023.subsystems.drivetrain.drive.Drivetrain
 import com.team4099.robot2023.subsystems.drivetrain.drive.DrivetrainIOReal
 import com.team4099.robot2023.subsystems.drivetrain.drive.DrivetrainIOSim
 import com.team4099.robot2023.subsystems.drivetrain.gyro.GyroIO
-import com.team4099.robot2023.subsystems.drivetrain.gyro.GyroIONavx
+import com.team4099.robot2023.subsystems.vision.Vision
+import com.team4099.robot2023.subsystems.vision.VisionIO
+import com.team4099.robot2023.subsystems.vision.VisionIOSim
 import org.team4099.lib.smoothDeadband
 
 object RobotContainer {
   private val drivetrain: Drivetrain
-  //  private val vision: Vision
+  private val vision: Vision
 
   init {
     if (Constants.Universal.ROBOT_MODE == Constants.Tuning.RobotType.REAL) {
       // Real Hardware Implementations
-      drivetrain = Drivetrain(GyroIONavx, DrivetrainIOReal)
-      //      vision = Vision(VisionIOSim)
+      drivetrain = Drivetrain(object : GyroIO {}, DrivetrainIOReal)
+      vision = Vision(object : VisionIO {})
     } else {
       // Simulation implementations
       drivetrain = Drivetrain(object : GyroIO {}, DrivetrainIOSim)
-      //      vision = Vision(VisionIOSim)
+      vision = Vision(VisionIOSim)
     }
   }
 
   fun mapDefaultCommands() {
     drivetrain.defaultCommand =
       TeleopDriveCommand(
-        { ControlBoard.strafe.smoothDeadband(Constants.Joysticks.THROTTLE_DEADBAND) },
         { ControlBoard.forward.smoothDeadband(Constants.Joysticks.THROTTLE_DEADBAND) },
+        { ControlBoard.strafe.smoothDeadband(Constants.Joysticks.THROTTLE_DEADBAND) },
         { ControlBoard.turn.smoothDeadband(Constants.Joysticks.TURN_DEADBAND) },
         { ControlBoard.robotOriented },
         drivetrain
@@ -58,6 +62,9 @@ object RobotContainer {
 
   fun mapTeleopControls() {
     ControlBoard.resetGyro.whileActiveOnce(ResetGyroYawCommand(drivetrain))
+    ControlBoard.autoLevel.whileActiveContinuous(
+      GoToAngle(drivetrain).andThen(AutoLevel(drivetrain))
+    )
     //
     // ControlBoard.advanceAndClimb.whileActiveOnce(AdvanceClimberCommand().andThen(RunClimbCommand()))
     //        ControlBoard.climbWithoutAdvance.whileActiveOnce(RunClimbCommand())
