@@ -194,10 +194,9 @@ class LimelightVision(val io: LimelightVisionIO) : SubsystemBase() {
     }
 
     // TODO add the thing
-    if (true){
+    if (true) {
       visionConsumer.accept(timestampedVisionUpdates)
     }
-
 
     Logger.getInstance()
       .recordOutput(

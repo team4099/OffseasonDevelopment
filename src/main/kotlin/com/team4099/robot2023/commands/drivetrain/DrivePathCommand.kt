@@ -184,9 +184,6 @@ class DrivePathCommand(
     thetaPID.enableContinuousInput(-PI.radians, PI.radians)
 
     swerveDriveController =
-
-
-
       CustomHolonomicDriveController(
         xPID.wpiPidController, yPID.wpiPidController, thetaPID.wpiPidController
       )

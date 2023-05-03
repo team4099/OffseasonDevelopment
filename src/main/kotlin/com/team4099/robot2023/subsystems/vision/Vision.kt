@@ -112,7 +112,7 @@ class Vision(vararg cameras: CameraIO) : SubsystemBase() {
 
             robotPose = cameraPose.transformBy(cameraPoses[instance].inverse()).toPose2d()
 
-            if (robotPose.rotation - (currentPose.rotation) >= 10.degrees){
+            if (robotPose.rotation - (currentPose.rotation) >= 10.degrees) {
               cameraPose = null
               robotPose = null
             }
@@ -176,7 +176,6 @@ class Vision(vararg cameras: CameraIO) : SubsystemBase() {
 
               val robotPose1 = cameraPose1.transformBy(cameraPoses[instance].inverse()).toPose2d()
 
-
               if (robotPose0.rotation.minus(currentPose.rotation).absoluteValue <
                 robotPose1.rotation.minus(currentPose.rotation).absoluteValue
               ) {
@@ -187,7 +186,7 @@ class Vision(vararg cameras: CameraIO) : SubsystemBase() {
                 robotPose = robotPose1
               }
 
-              if ((robotPose - currentPose).rotation.absoluteValue >= 10.degrees){
+              if ((robotPose - currentPose).rotation.absoluteValue >= 10.degrees) {
                 cameraPose = null
                 robotPose = null
               }
@@ -198,7 +197,7 @@ class Vision(vararg cameras: CameraIO) : SubsystemBase() {
           }
         }
 
-        if (instance == 1){
+        if (instance == 1) {
           println((robotPose?.rotation?.minus(currentPose.rotation))?.inDegrees)
         }
 
